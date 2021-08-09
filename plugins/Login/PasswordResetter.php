@@ -251,18 +251,19 @@ class PasswordResetter
 
         // token valid for 24 hrs (give or take, due to the coarse granularity in our strftime format string)
         for ($i = 0; $i <= 24; $i++) {
-            $generatedToken = $this->generatePasswordResetToken($user, $keySuffix, $now + $i * 60 * 60);
-            if ($generatedToken === $token) {
+            $generatedToken = $this->generatePasswordResetIdentifierToken($user, $keySuffix, $now + $i * 60 * 60);
+
+            if ((new Password)->verify($generatedToken, $token)) {
                 return true;
             }
         }
 
-        // fails if token is invalid, expired, password already changed, other user information has changed, ...
+        // If token is invalid, expired, password already changed, other user information has changed - fail.
         return false;
     }
 
     /**
-     * Generate a password reset token.  Expires in 24 hours from the beginning of the current hour.
+     * Generate a secure password reset token.  Expires in 24 hours from the beginning of the current hour.
      *
      * The reset token is generated using a user's email, login and the time when the token expires.
      *
@@ -274,6 +275,22 @@ class PasswordResetter
      */
     public function generatePasswordResetToken($user, $keySuffix, $expiryTimestamp = null)
     {
+        $token = $this->generatePasswordResetIdentifierToken($user, $keySuffix. $expiryTimestamp);
+
+        return $this->generateSecureHash($token);
+    }
+
+    /**
+     * Generate the unhashed password reset indentifier token
+     *
+     * @param      $user
+     * @param      $keySuffix
+     * @param null $expiryTimestamp
+     *
+     * @return string
+     */
+    protected function generatePasswordResetIdentifierToken($user, $keySuffix, $expiryTimestamp = null)
+    {
         /*
          * Piwik does not store the generated password reset token.
          * This avoids a database schema change and SQL queries to store, retrieve, and purge (expired) tokens.
@@ -283,11 +300,8 @@ class PasswordResetter
         }
 
         $expiry = strftime('%Y%m%d%H', $expiryTimestamp);
-        $token = $this->generateSecureHash(
-            $expiry . $user['login'] . $user['email'] . $user['ts_password_modified'] . $keySuffix,
-            $user['password']
-        );
-        return $token;
+
+        return $expiry . $user['login'] . $user['email'] . $user['ts_password_modified'] . $keySuffix;
     }
 
     public function doesResetPasswordHashMatchesPassword($passwordPlain, $passwordHash)
@@ -297,57 +311,14 @@ class PasswordResetter
     }
 
     /**
-     * Generates a hash using a hash "identifier" and some data to hash. The hash identifier is
-     * a string that differentiates the hash in some way.
+     * Generates a secure hash using a hash.
      *
-     * We can't get the identifier back from a hash but we can tell if a hash is the hash for
-     * a specific identifier by computing a hash for the identifier and comparing with the
-     * first hash.
-     *
-     * @param string $hashIdentifier A unique string that identifies the hash in some way, can,
-     *                               for example, be user information or can contain an expiration date,
-     *                               or whatever.
      * @param string $data Any data that needs to be hashed securely, ie, a password.
      * @return string The hash string.
      */
-    protected function generateSecureHash($hashIdentifier, $data)
+    protected function generateSecureHash($data)
     {
-        // mitigate rainbow table attack
-        $halfDataLen = strlen($data) / 2;
-
-        $stringToHash = $hashIdentifier
-                      . substr($data, 0, $halfDataLen)
-                      . $this->getSalt()
-                      . substr($data, $halfDataLen)
-                      ;
-
-        return $this->hashData($stringToHash);
-    }
-
-    /**
-     * Returns the string salt to use when generating a secure hash. Defaults to the value of
-     * the `[General] salt` INI config option.
-     *
-     * Derived classes can override this to provide a different salt.
-     *
-     * @return string
-     */
-    protected function getSalt()
-    {
-        return SettingsPiwik::getSalt();
-    }
-
-    /**
-     * Hashes a string.
-     *
-     * Derived classes can override this to provide a different hashing implementation.
-     *
-     * @param string $data The data to hash.
-     * @return string
-     */
-    protected function hashData($data)
-    {
-        return Common::hash($data);
+        return (new Password)->hash($data);
     }
 
     /**
