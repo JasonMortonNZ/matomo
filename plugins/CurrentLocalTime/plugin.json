@@ -1,0 +1,21 @@
+{
+  "name": "CurrentLocalTime",
+  "description": "Displays the websites current local time.",
+  "version": "1.0.0",
+  "keywords": [
+    "ui",
+    "visualization"
+  ],
+  "homepage": "http:\/\/piwik.org",
+  "license": "GPL v3+",
+  "authors": [
+    {
+      "name": "JasonMortonNZ",
+      "email": "jason@jasonnz.com",
+      "homepage": "https:\/\/jasonnz.com"
+    }
+  ],
+  "require": {
+    "matomo": ">=4.0.0-b1,<5.0.0-b1"
+  }
+}

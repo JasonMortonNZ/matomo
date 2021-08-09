@@ -1,0 +1,28 @@
+{% block content %}
+    <div class="widgetBody">
+        <p><strong>{{ 'CurrentLocalTime_Website'|translate }}: </strong><span id="currentSiteLocalTime"></span></p>
+        <p><strong>{{ 'CurrentLocalTime_User'|translate }}: </strong><span id="currentUserLocalTime"></span></p>
+    </div>
+{% endblock %}
+
+
+<script>
+    function updateDate() {
+        var currentSiteLocalTime = moment.tz(moment(), "{{ siteTimeZone }}").format('YYYY/MM/DD HH:mm');
+        var currentUserLocalTime = moment().format('YYYY/MM/DD HH:mm');
+
+        document.getElementById('currentSiteLocalTime').innerText = currentSiteLocalTime;
+
+        if (currentSiteLocalTime !== currentUserLocalTime) {
+            document.getElementById('currentUserLocalTime').innerText = currentUserLocalTime;
+        } else {
+            // If website and user times are the same - hide element
+            document.getElementById('currentUserLocalTime').parentElement.hidden = true;
+        }
+
+    }
+
+    updateDate();
+
+    setInterval(updateDate, 60*1000);
+</script>
