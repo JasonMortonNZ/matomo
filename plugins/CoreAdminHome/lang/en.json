@@ -41,6 +41,7 @@
         "JSTracking_EnableDoNotTrack": "Enable client side DoNotTrack detection",
         "JSTracking_EnableDoNotTrack_AlreadyEnabled": "Note: Server side DoNotTrack support has been enabled, so this option will have no effect.",
         "JSTracking_EnableDoNotTrackDesc": "So tracking requests will not be sent if visitors do not wish to be tracked.",
+        "JSTracking_FileProtocol": "Tracking requests via the file:// protocol will be tracked.",
         "JSTracking_GroupPageTitlesByDomain": "Prepend the site domain to the page title when tracking",
         "JSTracking_GroupPageTitlesByDomainDesc1": "So if someone visits the 'About' page on blog.%1$s it will be recorded as 'blog \/ About'. This is the easiest way to get an overview of your traffic by sub-domain.",
         "JSTracking_MergeAliases": "In the \"Outlinks\" report, hide clicks to known alias URLs of",

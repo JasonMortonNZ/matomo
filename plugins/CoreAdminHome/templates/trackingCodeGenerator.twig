@@ -97,6 +97,19 @@
                  value="" inline-help="#jsTrackAllAliasesInlineHelp">
             </div>
 
+            {# Track data from file:// protocol #}
+            <div id="jsTrackFileProtocolHelp" class="inline-help-node">
+                {{ 'CoreAdminHome_JSTracking_FileProtocol'|translate("<span class='current-site-alias'></span>")|raw }}
+            </div>
+
+            <div piwik-field uicontrol="checkbox" name="javascript-track-file-protocol"
+                 ng-model="jsTrackingCode.trackFileProtocol"
+                 ng-change="jsTrackingCode.updateTrackingCode()"
+                 data-disabled="jsTrackingCode.isLoading"
+                 data-title="{{ 'CoreAdminHome_JSTracking_FileProtocol'|translate|e('html_attr') }}"
+                 value="" inline-help="#jsTrackFileProtocolHelp">
+            </div>
+
             <div piwik-field uicontrol="checkbox" name="javascript-tracking-noscript"
                  ng-model="jsTrackingCode.trackNoScript"
                  ng-change="jsTrackingCode.updateTrackingCode()"
