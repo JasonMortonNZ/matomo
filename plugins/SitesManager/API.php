@@ -102,6 +102,7 @@ class API extends \Piwik\Plugin\API
      * @param bool $doNotTrack
      * @param bool $disableCookies
      * @param bool $trackNoScript
+     * @param bool $trackFileProtocol
      * @param bool $forceMatomoEndpoint Whether the Matomo endpoint should be forced if Matomo was installed prior 3.7.0.
      * @return string The Javascript tag ready to be included on the HTML pages
      */
@@ -109,7 +110,7 @@ class API extends \Piwik\Plugin\API
                                      $mergeAliasUrls = false, $visitorCustomVariables = false, $pageCustomVariables = false,
                                      $customCampaignNameQueryParam = false, $customCampaignKeywordParam = false,
                                      $doNotTrack = false, $disableCookies = false, $trackNoScript = false,
-                                     $crossDomain = false, $forceMatomoEndpoint = false)
+                                     $crossDomain = false, $forceMatomoEndpoint = false, $trackFileProtocol = false)
     {
         Piwik::checkUserHasViewAccess($idSite);
 
@@ -133,7 +134,7 @@ class API extends \Piwik\Plugin\API
         $code = $generator->generate($idSite, $piwikUrl, $mergeSubdomains, $groupPageTitlesByDomain,
                                      $mergeAliasUrls, $visitorCustomVariables, $pageCustomVariables,
                                      $customCampaignNameQueryParam, $customCampaignKeywordParam,
-                                     $doNotTrack, $disableCookies, $trackNoScript, $crossDomain);
+                                     $doNotTrack, $disableCookies, $trackNoScript, $crossDomain, $trackFileProtocol);
         $code = str_replace(array('<br>', '<br />', '<br/>'), '', $code);
         return $code;
     }
