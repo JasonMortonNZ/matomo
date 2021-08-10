@@ -46,6 +46,7 @@ class TrackerCodeGenerator
      * @param bool $doNotTrack
      * @param bool $disableCookies
      * @param bool $trackNoScript
+     * @param bool $trackFileProtocol
      * @return string Javascript code.
      */
     public function generate(
@@ -61,7 +62,8 @@ class TrackerCodeGenerator
         $doNotTrack = false,
         $disableCookies = false,
         $trackNoScript = false,
-        $crossDomain = false
+        $crossDomain = false,
+        $trackFileProtocol = false
     ) {
         // changes made to this code should be mirrored in plugins/CoreAdminHome/javascripts/jsTrackingGenerator.js var generateJsCode
 
@@ -140,6 +142,9 @@ class TrackerCodeGenerator
         }
         if ($disableCookies) {
             $options .= '  _paq.push(["disableCookies"]);' . "\n";
+        }
+        if ($trackFileProtocol) {
+            $options .= '  _paq.push(["trackFileProtocol", true]);' . "\n";
         }
 
         $codeImpl = array(
