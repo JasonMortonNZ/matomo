@@ -37,7 +37,7 @@ class TrackerCodeGeneratorTest extends IntegrationTestCase
             $pageCustomVariables = array(array("page cvar", "page cvar value")),
             $customCampaignNameQueryParam = "campaignKey", $customCampaignKeywordParam = "keywordKey",
             $doNotTrack = true, $disableCookies = false, $trackNoScript = true,
-            $crossDomain = true);
+            $crossDomain = true, $trackFileProtocol = true);
 
         $expected = "&lt;!-- Matomo --&gt;
 &lt;script&gt;
@@ -46,6 +46,7 @@ class TrackerCodeGeneratorTest extends IntegrationTestCase
   _paq.push([\"setDocumentTitle\", document.domain + \"/\" + document.title]);
   _paq.push([\"setCookieDomain\", \"*.localhost\"]);
   _paq.push([\"setDomains\", [\"*.localhost/piwik\",\"*.another-domain/piwik\",\"*.another-domain/piwik\"]]);
+  _paq.push([\"trackFileProtocol\", true]);
   _paq.push([\"enableCrossDomainLinking\"]);" . ($this->hasCustomVariables() ? "
   // you can set up to 5 custom variables for each visitor
   _paq.push([\"setCustomVariable\", 1, \"name\", \"value\", \"visit\"]);
