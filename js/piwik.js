@@ -5469,8 +5469,7 @@ if (typeof window.Matomo !== 'object') {
              * Set tracking of file protocol
              */
             this.trackFileProtocol = function (option) {
-                console.log(option);
-                if (option && option === true) {
+               if (option && option === true) {
                     trackFileProtocol = true;
                 }
             };
