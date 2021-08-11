@@ -2345,6 +2345,9 @@ if (typeof window.Matomo !== 'object') {
                 linkTrackingEnabled = false,
                 crossDomainTrackingEnabled = false,
 
+                // Track file protocol
+                trackFileProtocol = false,
+
                 // Guard against installing the activity tracker more than once per Tracker instance
                 heartBeatSetUp = false,
 
@@ -5459,6 +5462,16 @@ if (typeof window.Matomo !== 'object') {
                      * not add matomo.org as it would increase the allowed scope.
                      */
                     configHostsAlias.push(domainAlias);
+                }
+            };
+
+            /**
+             * Set tracking of file protocol
+             */
+            this.trackFileProtocol = function (option) {
+                console.log(option);
+                if (option && option === true) {
+                    trackFileProtocol = true;
                 }
             };
 
